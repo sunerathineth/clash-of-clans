@@ -16,7 +16,7 @@ app.use(cors());
 async function fetchData(endpoint) {
   try {
     const response = await fetch(
-      `https://api.clashofclans.com/v1/${endpoint}`,
+      `https://cocproxy.royaleapi.dev/v1/${endpoint}`,
       {
         method: "GET",
         headers: {
@@ -39,12 +39,15 @@ async function fetchData(endpoint) {
   }
 }
 
-// Route to fetch clan-related data dynamically
+// Handle specific types of data dynamically
 app.get("/api/clan/:type", async (req, res) => {
   try {
     const { type } = req.params;
+
+    // URL encode the clanTag to prevent issues with special characters
     const encodedClanTag = encodeURIComponent(clanTag);
 
+    // Map the dynamic type to the full API endpoint
     let endpoint;
     switch (type) {
       case "currentwar":
@@ -74,21 +77,6 @@ app.get("/api/clan/:type", async (req, res) => {
   } catch (error) {
     console.error("Error handling request:", error);
     res.status(500).json({ error: "Error fetching data" });
-  }
-});
-
-// Route to fetch player data
-app.get("/api/player/:tag", async (req, res) => {
-  try {
-    const { tag } = req.params;
-    const encodedPlayerTag = encodeURIComponent(tag);
-
-    const endpoint = `players/%23${encodedPlayerTag}`;
-    const data = await fetchData(endpoint);
-    res.json(data);
-  } catch (error) {
-    console.error("Error handling request:", error);
-    res.status(500).json({ error: "Error fetching player data" });
   }
 });
 
