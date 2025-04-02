@@ -68,6 +68,9 @@ app.get("/api/clan/:type", async (req, res) => {
       case "capitalraidseasons":
         endpoint = `clans/%23${encodedClanTag}/capitalraidseasons`;
         break;
+      case "leaguegroup":
+        endpoint = `clans/%23${encodedClanTag}/currentwar/leaguegroup`;
+        break;
       default:
         return res.status(400).json({ error: "Invalid data type requested" });
     }
